@@ -1,11 +1,11 @@
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
-from model import model
+#from model import model
 import torch.optim as optim
 import torch.nn as nn
 import torch
-from tensorflow_model import lstm_model_univariate, lstm_model_multivariate,compile_and_fit,  predict_and_plot
+from tensorflow_model import lstm_model_univariate, lstm_model_multivariate,compile_and_fit,  predict_and_plot_multivariate, predict_and_plot_univariate
 from tensorflow.keras.callbacks import ModelCheckpoint
 
 from tensorflow.keras.models import Sequential
@@ -27,7 +27,7 @@ data.index = pd.to_datetime(data['Date Time'], format= '%d.%m.%Y %H:%M:%S')
 #plt.savefig('temp_var.jpg')
 
 #breakpoint()
-choice = input('Enter 1 for univariate analysis or 2 for multivariate analysis')
+choice = input('Enter 1 for univariate analysis or 2 for multivariate analysis : ')
 if choice == 1:
     model_name = 'Univariate'
     X, y = set_matrix_form_univariate(df = data['T (degC)'], window=5)
@@ -46,29 +46,30 @@ if choice == 1:
                         , chkpt_dir=chkpt_dir_univariate, model_save_dir=model_save_dir_multivariate)
         model = load_model(model_save_dir_multivariate)
 
-    predict_and_plot(model, X_test, y_test, model_name)
+    predict_and_plot_univariate(model, X_test, y_test, model_name)
 else:
     model_name = 'Multivariate'
     multivariate_data = create_multivariate_data(data)
-    X, y = set_matrix_form_multivariate(multivariate_data, 6)
+    X, y, y_temp, y_pressure = set_matrix_form_multivariate(multivariate_data, 6)
     X_train, y_train = X[:60000], y[:60000]
-    X_val, y_val = X[60000:65000], y[60000:65000]
-    X_test, y_test = X[65000:70000], y[65000:70000]
-    breakpoint()
+    X_val, y_val= X[60000:65000], y[60000:65000]
+    X_test, y_test, y_temp, y_pressure = X[65000:70000], y[65000:70000], y_temp[65000:70000], y_pressure[65000:70000]
+    #breakpoint()
 
     chkpt_dir_multivariate = r'save_model\multivariate\lstm/'
     model_save_dir_multivariate = r'save_model\multivariate\lstm/lstm_model.h5'
 
     if model_save_dir_multivariate and os.path.isfile(model_save_dir_multivariate):
         model = load_model(model_save_dir_multivariate)
+        breakpoint()
     else:
         lstm_model = lstm_model_multivariate()
         compile_and_fit(lstm_model, X_train=X_train, y_train=y_train, X_val=X_val, y_val=y_val
                         , chkpt_dir=chkpt_dir_multivariate, model_save_dir=model_save_dir_multivariate)
         model = load_model(model_save_dir_multivariate)
 
-    predict_and_plot(model, X_test, y_test, model_name)
+    predict_and_plot_multivariate(model, X_test, y_temp, y_pressure, model_name)
 
-    breakpoint()
+    #breakpoint()
 
 
