@@ -1,4 +1,4 @@
-## Time-Series Forecasting for Temperature Prediction
+# Time-Series Forecasting for Temperature Prediction
 # Overview
 This project aims to develop time-series forecasting models for temperature prediction. Temperature forecasting is crucial for a wide range of applications, including climate monitoring, energy management, and agriculture. The project explores both univariate and bivariate approaches to leverage historical temperature data collected at 10-minute intervals over a 10-year period.
 
@@ -47,7 +47,7 @@ Mean Absolute Error (MAE): Measures the average absolute difference between pred
 Root Mean Squared Error (RMSE): Provides a measure of the prediction error.
 
 
-License
+# License
 Genral Public License 3.0
 
 By creating a robust time-series forecasting model for temperature prediction, this project aims to facilitate informed decision-making in various fields where temperature plays a crucial role. The univariate and bivariate approaches, coupled with LSTM networks and traditional models, offer a comprehensive analysis of forecasting accuracy and performance.
